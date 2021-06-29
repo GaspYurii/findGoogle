@@ -1,12 +1,11 @@
-package com.melon.parserQuery;
+package com.melon.parserquery;
 
 import java.io.IOException;
 
 public class Application {
     public static void main(String[] args) throws IOException {
-        Model model = new Model();
         View view = new View();
-        Controller controller = new Controller(model, view);
+        Controller controller = new Controller(view);
         controller.process();
     }
 }
