@@ -1,25 +1,26 @@
 package com.melon.parserquery;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class View {
-    public String getInput(String exitKey) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String input = "";
+    public String getInput() {
+        String input;
 
-        try {
-            printEnterQuery(exitKey);
-            input = reader.readLine();
-            input = input.trim();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (input.equals("")) {
+        input = input().trim();
+
+        while (input.equals("")) {
             inputIsEmpty();
-            getInput(exitKey);
+            input = input().trim();
         }
+        return input;
+    }
+
+    private String input() {
+        String input;
+        Scanner scanner;
+        scanner = new Scanner(System.in);
+        printEnterQuery(Constants.EXIT_KEY);
+        input = scanner.nextLine();
 
         return input;
     }
@@ -30,9 +31,7 @@ public class View {
 
     public void show(String string) { System.out.println(string); }
 
-    public void printConnection() {
-        System.out.println("Connection...");
-    }
+    public void printConnection() { System.out.println("Connection..."); }
 
     public void inputIsEmpty() {System.out.println("Your input should not be empty");}
 }

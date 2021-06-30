@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Controller {
 
-    private String exitKey = "!exit";
+    private String exitKey = ":q";
     private final View view;
 
     public Controller(View view) {
@@ -14,14 +14,15 @@ public class Controller {
     }
 
     public void process() throws IOException {
+        ParserGoogle parserGoogle = new ParserGoogle();
+
         while (true) {
-            String input = view.getInput(exitKey);
+            String input = view.getInput();
             if (input.equals(exitKey)) { break; }
 
             view.printConnection();
-            ParserGoogle parserGoogle = new ParserGoogle(input);
 
-            Model model = new Model(input, parserGoogle.getResultStats());
+            Model model = new Model(input, parserGoogle.getResultStats(input));
 
             view.show(model.getResultStats());
         }

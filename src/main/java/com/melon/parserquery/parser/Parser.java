@@ -7,15 +7,12 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 
 public abstract class Parser {
-    private String url;
-
-    public Parser(String url) {
-        this.url = url;
+    public Parser() {
     }
 
-    public Document getDocument() throws IOException {
+    public Document getDocument(String url) throws IOException {
             return Jsoup.connect(url).get();
     }
 
-   public abstract void parse() throws IOException;
+    public abstract String getResultStats(String query) throws IOException;
 }

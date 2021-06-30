@@ -1,5 +1,6 @@
 package com.melon.parserquery.parser;
 
+import com.melon.parserquery.Constants;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -7,19 +8,14 @@ import java.io.IOException;
 
 public class ParserGoogle extends Parser{
 
-    private Document document;
     Element resultStats;
 
-    public ParserGoogle(String query) {
-        super ("https://www.google.ru/search?q=" + query);
-    }
+    public ParserGoogle() { }
 
     @Override
-    public void parse() throws IOException { document = getDocument(); }
-
-    public String getResultStats() throws IOException {
-        parse();
-        resultStats = document.getElementById("result-stats");
+    public String getResultStats(String query) throws IOException {
+        Document document = getDocument("https://www.google.ru/search?q=" + query);
+        resultStats = document.getElementById(Constants.RESULT_STATS);
         return resultStats.text();
     }
 }
