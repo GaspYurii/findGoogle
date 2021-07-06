@@ -1,5 +1,7 @@
 package com.melon.parserquery;
 
+import com.melon.parserquery.model.SearchQueryDTO;
+
 import java.util.Scanner;
 
 public class View {
@@ -29,7 +31,14 @@ public class View {
         System.out.println("Enter your query. To exit enter: " + exitKey);
     }
 
-    public void show(String string) { System.out.println(string); }
+    public void show(SearchQueryDTO model) {
+        System.out.printf("About %d results in %s\n",
+                model.getResultCount(),
+                model.getSearcher().toString()
+        );
+    }
+
+    public void show(long value) { System.out.println("Count: " + value); }
 
     public void printConnection() { System.out.println("Connection..."); }
 
