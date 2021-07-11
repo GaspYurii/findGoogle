@@ -2,6 +2,7 @@ package com.melon.parserquery;
 
 import com.melon.parserquery.model.SearchQueryDTO;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class View {
@@ -38,7 +39,11 @@ public class View {
         );
     }
 
-    public void show(long value) { System.out.println("Count: " + value); }
+    public void show(List<SearchQueryDTO> models) {
+        for (SearchQueryDTO model : models) {
+            show(model);
+        }
+    }
 
     public void printConnection() { System.out.println("Connection..."); }
 
