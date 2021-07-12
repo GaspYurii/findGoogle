@@ -24,7 +24,7 @@ public class Controller {
             String input = view.getInput();
             if (input.equals(Constants.EXIT_KEY)) { break; }
 
-            view.printConnection();
+            view.println("");
 
             Searchers[] searchers = new Searchers[] { Searchers.GOOGLE, Searchers.YAHOO };
             List<SearchQueryDTO> models = getSearchQueryDTOList(input, searchers);

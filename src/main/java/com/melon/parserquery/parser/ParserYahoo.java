@@ -6,12 +6,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class ParserYahoo implements Parser {
     private static final String YAHOO_SEARCH_URL = "https://search.yahoo.com/search?p=";
     private static final String STATISTIC_SELECTOR_USUAL = "div.compPagination > span";
     private static final String STATISTIC_SELECTOR_UNUSUAL = "div.compTitle.fc-smoke";
     private static final String REG_EX = "([0-9]{1,3},)+([0-9]{3})++";
+    private static final Pattern pattern = Pattern.compile(REG_EX);
 
     ParserYahoo() { /**/ }
 
@@ -34,7 +36,7 @@ public class ParserYahoo implements Parser {
             resultStats = document.selectFirst(STATISTIC_SELECTOR_UNUSUAL);
         }
 
-        return getResultCount(resultStats.text(), REG_EX);
+        return getResultCount(resultStats.text(), pattern, ",");
     }
 
 }

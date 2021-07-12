@@ -2,12 +2,14 @@ package com.melon.parserquery.parser;
 
 public class ParserFactory {
     public Parser create(Searchers searcher) {
-        Parser parser = null;
+        if (Searchers.GOOGLE.equals(searcher)) {
+            return new ParserGoogle();
+        }
 
-        if (searcher.equals(Searchers.GOOGLE)) { parser = new ParserGoogle(); }
+        if (Searchers.YAHOO.equals(searcher))  {
+            return new ParserYahoo();
+        }
 
-        if (searcher.equals(Searchers.YAHOO))  { parser = new ParserYahoo(); }
-
-        return parser;
+        throw new IllegalArgumentException("Wrong searcher type: " + searcher);
     }
 }

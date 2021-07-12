@@ -4,6 +4,7 @@ package com.melon.parserquery.parser;
 import com.melon.parserquery.model.SearchQueryDTO;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,15 +14,15 @@ public interface Parser {
 
     long getResultStats(String query) throws IOException;
 
-    default long getResultCount(String string, String regEx) {
+    default long getResultCount(String string, Pattern pattern, String delimiter) {
         String resultString = "";
-        Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(string);
 
         while (matcher.find()) {
-            resultString = string.substring(matcher.start(), matcher.end());
+            resultString = matcher.group();
         }
-        resultString = resultString.replace(",", "");
+
+        resultString = resultString.replace(delimiter, "");
         return Long.parseLong(resultString);
     }
 }

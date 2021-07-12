@@ -7,12 +7,10 @@ import java.util.Scanner;
 
 public class View {
     public String getInput() {
-        String input;
-
-        input = input().trim();
+        String input = input().trim();
 
         while (input.equals("")) {
-            inputIsEmpty();
+            println(Constants.INPUT_EMPTY);
             input = input().trim();
         }
         return input;
@@ -22,20 +20,21 @@ public class View {
         String input;
         Scanner scanner;
         scanner = new Scanner(System.in);
-        printEnterQuery(Constants.EXIT_KEY);
+        println(Constants.ENTER_QUERY);
         input = scanner.nextLine();
 
         return input;
     }
 
-    public void printEnterQuery(String exitKey) {
-        System.out.println("Enter your query. To exit enter: " + exitKey);
+    public void println(String s) {
+        System.out.println(s);
     }
 
     public void show(SearchQueryDTO model) {
-        System.out.printf("About %d results in %s\n",
+        println(String.format("About %d results in %s",
                 model.getResultCount(),
                 model.getSearcher().toString()
+                )
         );
     }
 
@@ -45,7 +44,4 @@ public class View {
         }
     }
 
-    public void printConnection() { System.out.println("Connection..."); }
-
-    public void inputIsEmpty() {System.out.println("Your input should not be empty");}
 }
