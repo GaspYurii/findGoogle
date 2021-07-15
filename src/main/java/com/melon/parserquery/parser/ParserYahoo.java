@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class ParserYahoo implements Parser {
@@ -18,17 +19,17 @@ public class ParserYahoo implements Parser {
     ParserYahoo() { /**/ }
 
     @Override
-    public SearchQueryDTO getSearchQueryDTO(String query) throws IOException {
+    public SearchQueryDTO getSearchQueryDTO(String query, Locale locale) throws IOException {
         return SearchQueryDTO.builder()
                 .setQuery(query)
-                .setResultCount(getResultStats(query))
+                .setResultCount(getResultStats(query, locale))
                 .setSearcher(Searchers.YAHOO)
                 .build();
     }
 
     @Override
-    public long getResultStats(String query) throws IOException {
-        Document document = WebPageConnector.getDocument(YAHOO_SEARCH_URL + query);
+    public long getResultStats(String query, Locale locale) throws IOException {
+        Document document = WebPageConnector.getDocument(YAHOO_SEARCH_URL + query, locale);
         Element resultStats;
         resultStats = document.selectFirst(STATISTIC_SELECTOR_USUAL);
 

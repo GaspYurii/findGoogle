@@ -8,11 +8,13 @@ import com.melon.parserquery.parser.Searchers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Controller {
 
     private final View view;
     private final ParserFactory parserFactory = new ParserFactory();
+    private final Locale locale = Locale.UK;
 
     public Controller(View view) {
         this.view = view;
@@ -24,12 +26,12 @@ public class Controller {
             String input = view.getInput();
             if (input.equals(Constants.EXIT_KEY)) { break; }
 
-            view.println("");
+            view.println(Constants.CONNECTING);
 
             Searchers[] searchers = new Searchers[] { Searchers.GOOGLE, Searchers.YAHOO };
             List<SearchQueryDTO> models = getSearchQueryDTOList(input, searchers);
 
-            view.show(models);
+            view.printSearchQueryDTO(models, locale);
         }
     }
 
@@ -38,10 +40,11 @@ public class Controller {
 
         for (Searchers searcher : searchers) {
             Parser parser = parserFactory.create(searcher);
-            models.add(parser.getSearchQueryDTO(query));
+            models.add(parser.getSearchQueryDTO(query, locale));
         }
 
         return models;
     }
+
 
 }

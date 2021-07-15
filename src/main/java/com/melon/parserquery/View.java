@@ -2,10 +2,13 @@ package com.melon.parserquery;
 
 import com.melon.parserquery.model.SearchQueryDTO;
 
-import java.util.List;
+import java.text.NumberFormat;
+import java.util.Collection;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class View {
+
     public String getInput() {
         String input = input().trim();
 
@@ -30,18 +33,21 @@ public class View {
         System.out.println(s);
     }
 
-    public void show(SearchQueryDTO model) {
-        println(String.format("About %d results in %s",
-                model.getResultCount(),
-                model.getSearcher().toString()
-                )
-        );
+    public void printSearchQueryDTO(SearchQueryDTO model, Locale locale) {
+        println(format(model, locale));
     }
 
-    public void show(List<SearchQueryDTO> models) {
+    public void printSearchQueryDTO(Collection<SearchQueryDTO> models, Locale locale) {
         for (SearchQueryDTO model : models) {
-            show(model);
+            printSearchQueryDTO(model, locale);
         }
     }
 
+    private String format(SearchQueryDTO model, Locale locale) {
+        NumberFormat numberFormat = NumberFormat.getInstance(locale);
+
+        return String.format("About %s results in %s",
+                numberFormat.format(model.getResultCount()),
+                model.getSearcher().toString());
+    }
 }

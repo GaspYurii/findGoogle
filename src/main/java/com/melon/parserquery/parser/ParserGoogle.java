@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class ParserGoogle implements Parser{
@@ -17,19 +18,18 @@ public class ParserGoogle implements Parser{
     ParserGoogle() { /**/ }
 
     @Override
-    public SearchQueryDTO getSearchQueryDTO(String query) throws IOException {
+    public SearchQueryDTO getSearchQueryDTO(String query, Locale locale) throws IOException {
         return SearchQueryDTO.builder()
                 .setQuery(query)
-                .setResultCount(getResultStats(query))
+                .setResultCount(getResultStats(query, locale))
                 .setSearcher(Searchers.GOOGLE)
                 .build();
     }
 
     @Override
-    public long getResultStats(String query) throws IOException {
-        Document document = WebPageConnector.getDocument(GOOGLE_SEARCH_URL + query);
+    public long getResultStats(String query, Locale locale) throws IOException {
+        Document document = WebPageConnector.getDocument(GOOGLE_SEARCH_URL + query, locale);
         Element resultStats = document.getElementById(RESULT_STATS_ID);
         return getResultCount(resultStats.text(), pattern, ",");
     }
-
 }
