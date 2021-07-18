@@ -3,12 +3,13 @@ package com.melon.parserquery;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.parser.Parser;
 import com.melon.parserquery.parser.ParserFactory;
-import com.melon.parserquery.parser.Searchers;
+import com.melon.parserquery.view.View;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -20,30 +21,36 @@ public class Controller {
         this.view = view;
     }
 
-    public void process() throws IOException {
+    public void process() {
+        view.println(Constants.CHOOSE_SEARCHERS);
+        List<Parser> parsers = parserFactory.getParsers(view.getSearchers());
 
         while (true) {
+            view.println(Constants.ENTER_QUERY);
             String input = view.getInput();
-            if (input.equals(Constants.EXIT_KEY)) { break; }
+            if (input.equals(Constants.EXIT_KEY)) {
+                break;
+            }
 
             view.println(Constants.CONNECTING);
 
-            Searchers[] searchers = new Searchers[] { Searchers.GOOGLE, Searchers.YAHOO };
-            List<SearchQueryDTO> models = getSearchQueryDTOList(input, searchers);
+            List<SearchQueryDTO> models = getSearchQueryDTOList(input, parsers);
 
             view.printSearchQueryDTO(models, locale);
         }
     }
 
-    private List<SearchQueryDTO> getSearchQueryDTOList(String query, Searchers[] searchers) throws IOException {
-        List<SearchQueryDTO> models = new ArrayList<>();
-
-        for (Searchers searcher : searchers) {
-            Parser parser = parserFactory.create(searcher);
-            models.add(parser.getSearchQueryDTO(query, locale));
-        }
-
-        return models;
+    private List<SearchQueryDTO> getSearchQueryDTOList(String query, Collection<Parser> parsers) {
+        return parsers.stream().parallel()
+                .map(parser -> {
+                    try {
+                        return parser.getSearchQueryDTO(query, locale);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
+                .collect(Collectors.toList());
     }
 
 

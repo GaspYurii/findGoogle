@@ -1,12 +1,12 @@
 package com.melon.parserquery.model;
 
-import com.melon.parserquery.parser.Searchers;
+import com.melon.parserquery.parser.Searcher;
 
 
 public class SearchQueryDTO {
     private final String query;
     private final long resultCount;
-    private final Searchers searcher;
+    private final Searcher searcher;
 
     public SearchQueryDTO(Builder builder) {
         this.query = builder.query;
@@ -26,12 +26,14 @@ public class SearchQueryDTO {
         return resultCount;
     }
 
-    public Searchers getSearcher() { return searcher; }
+    public Searcher getSearcher() {
+        return searcher;
+    }
 
     public static class Builder {
         private String query;
         private long resultStats;
-        private Searchers searcher;
+        private Searcher searcher;
 
         public Builder setQuery(String input) {
             this.query = input;
@@ -43,7 +45,7 @@ public class SearchQueryDTO {
             return this;
         }
 
-        public Builder setSearcher(Searchers searcher) {
+        public Builder setSearcher(Searcher searcher) {
             this.searcher = searcher;
             return this;
         }

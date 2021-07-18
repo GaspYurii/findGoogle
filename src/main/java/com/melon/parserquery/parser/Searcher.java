@@ -1,5 +1,5 @@
 package com.melon.parserquery.parser;
 
-public enum Searchers {
+public enum Searcher {
     GOOGLE, YAHOO
 }

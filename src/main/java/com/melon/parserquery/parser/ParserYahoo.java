@@ -23,7 +23,7 @@ public class ParserYahoo implements Parser {
         return SearchQueryDTO.builder()
                 .setQuery(query)
                 .setResultCount(getResultStats(query, locale))
-                .setSearcher(Searchers.YAHOO)
+                .setSearcher(Searcher.YAHOO)
                 .build();
     }
 

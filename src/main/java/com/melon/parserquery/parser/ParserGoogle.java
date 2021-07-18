@@ -22,7 +22,7 @@ public class ParserGoogle implements Parser{
         return SearchQueryDTO.builder()
                 .setQuery(query)
                 .setResultCount(getResultStats(query, locale))
-                .setSearcher(Searchers.GOOGLE)
+                .setSearcher(Searcher.GOOGLE)
                 .build();
     }
 

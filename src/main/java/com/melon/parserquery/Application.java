@@ -1,5 +1,7 @@
 package com.melon.parserquery;
 
+import com.melon.parserquery.view.View;
+
 import java.io.IOException;
 
 public class Application {
