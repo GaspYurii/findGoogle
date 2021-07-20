@@ -1,5 +1,6 @@
 package com.melon.parserquery.parser;
 
+import com.melon.parserquery.exception.ParserException;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.webutils.WebPageConnector;
 import org.jsoup.nodes.Document;
@@ -19,7 +20,7 @@ public class ParserYahoo implements Parser {
     ParserYahoo() { /**/ }
 
     @Override
-    public SearchQueryDTO getSearchQueryDTO(String query, Locale locale) throws IOException {
+    public SearchQueryDTO getSearchQueryDTO(String query, Locale locale) {
         return SearchQueryDTO.builder()
                 .setQuery(query)
                 .setResultCount(getResultStats(query, locale))
@@ -28,16 +29,19 @@ public class ParserYahoo implements Parser {
     }
 
     @Override
-    public long getResultStats(String query, Locale locale) throws IOException {
-        Document document = WebPageConnector.getDocument(YAHOO_SEARCH_URL + query, locale);
-        Element resultStats;
-        resultStats = document.selectFirst(STATISTIC_SELECTOR_USUAL);
+    public long getResultStats(String query, Locale locale) {
+        try {
+            Document document = WebPageConnector.getDocument(YAHOO_SEARCH_URL + query, locale);
+            Element resultStats = document.selectFirst(STATISTIC_SELECTOR_USUAL);
 
-        if (resultStats == null) {
-            resultStats = document.selectFirst(STATISTIC_SELECTOR_UNUSUAL);
+            if (resultStats == null) {
+                resultStats = document.selectFirst(STATISTIC_SELECTOR_UNUSUAL);
+            }
+
+            return getResultCount(resultStats.text(), pattern, ",");
+        } catch (IOException e) {
+            throw new ParserException();
         }
-
-        return getResultCount(resultStats.text(), pattern, ",");
     }
 
 }

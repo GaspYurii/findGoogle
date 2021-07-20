@@ -1,24 +1,20 @@
 package com.melon.parserquery.view;
 
-import com.melon.parserquery.Constants;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.parser.Searcher;
-import com.melon.parserquery.view.menu.MenuItem;
-import com.melon.parserquery.view.menu.SearcherMenu;
-import com.melon.parserquery.view.menu.SearcherMenuKeys;
+import com.melon.parserquery.view.menu.SearcherMenuItem;
 
 import java.text.NumberFormat;
 import java.util.*;
 
 public class View {
     private final Scanner scanner = new Scanner(System.in);
-    private final SearcherMenu searcherMenu = SearcherMenu.getInstance();
 
     public String getInput() {
         String input = getInputFromKeyboard().trim();
 
         while (input.equals("")) {
-            println(Constants.INPUT_EMPTY);
+            println(ViewConstants.INPUT_EMPTY);
             input = getInputFromKeyboard().trim();
         }
         return input;
@@ -49,32 +45,23 @@ public class View {
     }
 
     public List<Searcher> getSearchers() {
-        List<Searcher> list = new ArrayList<>();
-        String input = getInput();
-        while (!validateSearcherInput(input)) {
-            println(Constants.WRONG_OPTION);
-            println(Constants.CHOOSE_SEARCHERS);
-            input = getInput();
-        }
-
-        if (SearcherMenuKeys.ALL.equals(input)) {
-            list.add(Searcher.GOOGLE);
-            list.add(Searcher.YAHOO);
-        } else if (SearcherMenuKeys.GOOGLE.equals(input)) {
-            list.add(Searcher.GOOGLE);
-        } else if (SearcherMenuKeys.YAHOO.equals(input)) {
-            list.add(Searcher.YAHOO);
-        }
-
-        return list;
+        Searcher[] searchers = null;
+        do {
+            if (searchers != null) {
+                println(ViewConstants.WRONG_OPTION);
+            }
+            println(ViewConstants.CHOOSE_SEARCHERS);
+            searchers = SearcherMenuItem.getSearcherByKey(getInput());
+        } while (searchers.length == 0);
+        return Arrays.asList(searchers);
     }
 
-    private boolean validateSearcherInput(String input) {
-        for (MenuItem item : searcherMenu.getMenuList()) {
-            if (item.getMenuItemKey().equals(input)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean saveChoiceParser() {
+        String input;
+        do {
+            println(ViewConstants.SAVE_PARSERS);
+            input = getInput();
+        } while (ViewConstants.Y.equals(input) == ViewConstants.N.equals(input));
+        return !ViewConstants.Y.equals(input);
     }
 }

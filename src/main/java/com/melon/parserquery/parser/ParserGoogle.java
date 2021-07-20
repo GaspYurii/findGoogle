@@ -1,5 +1,6 @@
 package com.melon.parserquery.parser;
 
+import com.melon.parserquery.exception.ParserException;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.webutils.WebPageConnector;
 import org.jsoup.nodes.Document;
@@ -18,7 +19,7 @@ public class ParserGoogle implements Parser{
     ParserGoogle() { /**/ }
 
     @Override
-    public SearchQueryDTO getSearchQueryDTO(String query, Locale locale) throws IOException {
+    public SearchQueryDTO getSearchQueryDTO(String query, Locale locale) {
         return SearchQueryDTO.builder()
                 .setQuery(query)
                 .setResultCount(getResultStats(query, locale))
@@ -27,9 +28,13 @@ public class ParserGoogle implements Parser{
     }
 
     @Override
-    public long getResultStats(String query, Locale locale) throws IOException {
-        Document document = WebPageConnector.getDocument(GOOGLE_SEARCH_URL + query, locale);
-        Element resultStats = document.getElementById(RESULT_STATS_ID);
-        return getResultCount(resultStats.text(), pattern, ",");
+    public long getResultStats(String query, Locale locale) {
+        try {
+            Document document = WebPageConnector.getDocument(GOOGLE_SEARCH_URL + query, locale);
+            Element resultStats = document.getElementById(RESULT_STATS_ID);
+            return getResultCount(resultStats.text(), pattern, ",");
+        } catch (IOException e) {
+            throw new ParserException();
+        }
     }
 }
