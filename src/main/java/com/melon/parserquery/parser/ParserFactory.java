@@ -1,6 +1,5 @@
 package com.melon.parserquery.parser;
 
-import com.melon.parserquery.LogConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,13 +17,10 @@ public class ParserFactory {
             return new ParserYahoo();
         }
 
-        logInfo(searcher);
-
         throw new IllegalArgumentException("Wrong searcher type: " + searcher);
     }
 
     private void logInfo(Searcher searcher) {
-        String logInfo = LogConstants.PARSER_CREATED + searcher;
-        logger.info(logInfo);
+        logger.info("Parser created for: {}", searcher);
     }
 }

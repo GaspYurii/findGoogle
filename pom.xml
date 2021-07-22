@@ -12,7 +12,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-
         <!-- Parsing -->
         <jsoup.version>1.13.1</jsoup.version>
         <!-- Logging -->
@@ -76,7 +75,7 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <formats>HTML, XML</formats>
+                            <formats>HTML,XML</formats>
                         </configuration>
                     </execution>
                     <execution>

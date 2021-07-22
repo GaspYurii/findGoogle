@@ -1,6 +1,5 @@
 package com.melon.parserquery.view;
 
-import com.melon.parserquery.LogConstants;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.parser.Searcher;
 import com.melon.parserquery.view.menu.SearcherMenuItem;
@@ -20,7 +19,7 @@ public class View {
 
         while (input.equals("")) {
             println(ViewConstants.INPUT_EMPTY);
-            logger.debug(LogConstants.INPUT_EMPTY);
+            logger.debug("User input is empty or only spaces");
             input = getInputFromKeyboard().trim();
         }
         return input;
@@ -55,7 +54,7 @@ public class View {
         do {
             if (searchers != null) {
                 println(ViewConstants.WRONG_OPTION);
-                logger.debug(LogConstants.WRONG_OPTION);
+                logger.debug("Wrong option of searcher menu");
             }
             println(ViewConstants.CHOOSE_SEARCHERS);
             searchers = SearcherMenuItem.getSearcherByKey(getInput());
@@ -71,8 +70,7 @@ public class View {
         } while (ViewConstants.Y.equals(input) == ViewConstants.N.equals(input));
         boolean result = ViewConstants.Y.equals(input);
         if (result) {
-            String logInfo = LogConstants.SEARCHERS_SAVED + searchers;
-            logger.info(logInfo);
+            logger.info("Search engine selection saved: {}", searchers);
         }
         return result;
     }

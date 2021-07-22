@@ -28,9 +28,6 @@ public class Controller {
 
     public void process() {
         try {
-            for (int i = 0; i < 1000; i++) {
-                logger.debug("" + i);
-            }
             while (true) {
                 if (unsavedChoiceParsers) {
                     searchers = view.getSearchers();
@@ -51,7 +48,7 @@ public class Controller {
                 view.printSearchQueryDTO(models, locale);
             }
         } catch (Exception e) {
-            logger.error(LogConstants.TROUBLE, e);
+            logger.error("Trouble", e);
         }
 
     }

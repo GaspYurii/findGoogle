@@ -1,7 +1,6 @@
 package com.melon.parserquery.parser;
 
 import com.melon.parserquery.exception.ParserException;
-import com.melon.parserquery.loggerutil.LoggerUtil;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.webutils.WebPageConnector;
 import org.jsoup.nodes.Document;
@@ -43,8 +42,8 @@ public class ParserYahoo implements Parser {
             }
 
             long resultCount = getResultCount(resultStats.text(), pattern, ",");
-            String logInfo = LoggerUtil.formatParserLog(Searcher.YAHOO, locale, query, resultCount);
-            logger.info(logInfo);
+            logger.info("{}: About [{}] results in location [{}] for query: [{}]",
+                    Searcher.YAHOO, resultCount, locale, query);
             return resultCount;
         } catch (IOException e) {
             throw new ParserException();

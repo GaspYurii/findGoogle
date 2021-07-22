@@ -1,7 +1,6 @@
 package com.melon.parserquery.parser;
 
 import com.melon.parserquery.exception.ParserException;
-import com.melon.parserquery.loggerutil.LoggerUtil;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.webutils.WebPageConnector;
 import org.jsoup.nodes.Document;
@@ -38,8 +37,8 @@ public class ParserGoogle implements Parser {
             Document document = WebPageConnector.getDocument(GOOGLE_SEARCH_URL + query, locale);
             Element resultStats = document.getElementById(RESULT_STATS_ID);
             long resultCount = getResultCount(resultStats.text(), pattern, ",");
-            String logInfo = LoggerUtil.formatParserLog(Searcher.GOOGLE, locale, query, resultCount);
-            logger.info(logInfo);
+            logger.info("{}: About [{}] results in location [{}] for query: [{}]",
+                    Searcher.GOOGLE, resultCount, locale, query);
             return resultCount;
         } catch (IOException e) {
             throw new ParserException();
