@@ -6,6 +6,8 @@ import com.melon.parserquery.parser.ParserCache;
 import com.melon.parserquery.parser.Searcher;
 import com.melon.parserquery.view.View;
 import com.melon.parserquery.view.ViewConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Controller {
+    Logger logger = LoggerFactory.getLogger(Controller.class);
 
     private final View view;
     private static final Locale locale = Locale.UK;
@@ -25,26 +28,30 @@ public class Controller {
 
     public void process() {
         try {
+            for (int i = 0; i < 1000; i++) {
+                logger.debug("" + i);
+            }
             while (true) {
                 if (unsavedChoiceParsers) {
                     searchers = view.getSearchers();
-                    unsavedChoiceParsers = view.saveChoiceParser();
+                    unsavedChoiceParsers = !view.isSavedChoiceParser(searchers);
                 }
+
                 List<Parser> parsers = ParserCache.getParsers(searchers);
                 view.println(ViewConstants.ENTER_QUERY);
-                String input = view.getInput();
-                if (input.equals(ViewConstants.EXIT_KEY)) {
+                String query = view.getInput();
+                if (ViewConstants.EXIT_KEY.equals(query)) {
                     break;
                 }
 
                 view.println(ViewConstants.CONNECTING);
 
-                List<SearchQueryDTO> models = getSearchQueryDTOList(input, parsers);
+                List<SearchQueryDTO> models = getSearchQueryDTOList(query, parsers);
 
                 view.printSearchQueryDTO(models, locale);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(LogConstants.TROUBLE, e);
         }
 
     }

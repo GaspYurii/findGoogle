@@ -1,10 +1,13 @@
 package com.melon.parserquery.parser;
 
 import com.melon.parserquery.exception.ParserException;
+import com.melon.parserquery.loggerutil.LoggerUtil;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.webutils.WebPageConnector;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -16,6 +19,7 @@ public class ParserYahoo implements Parser {
     private static final String STATISTIC_SELECTOR_UNUSUAL = "div.compTitle.fc-smoke";
     private static final String REG_EX = "([0-9]{1,3},)+([0-9]{3})++";
     private static final Pattern pattern = Pattern.compile(REG_EX);
+    private final Logger logger = LoggerFactory.getLogger(ParserYahoo.class);
 
     ParserYahoo() { /**/ }
 
@@ -38,7 +42,10 @@ public class ParserYahoo implements Parser {
                 resultStats = document.selectFirst(STATISTIC_SELECTOR_UNUSUAL);
             }
 
-            return getResultCount(resultStats.text(), pattern, ",");
+            long resultCount = getResultCount(resultStats.text(), pattern, ",");
+            String logInfo = LoggerUtil.formatParserLog(Searcher.YAHOO, locale, query, resultCount);
+            logger.info(logInfo);
+            return resultCount;
         } catch (IOException e) {
             throw new ParserException();
         }
