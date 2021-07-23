@@ -4,7 +4,7 @@ import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.parser.Parser;
 import com.melon.parserquery.parser.ParserCache;
 import com.melon.parserquery.parser.Searcher;
-import com.melon.parserquery.view.View;
+import com.melon.parserquery.view.ConsoleView;
 import com.melon.parserquery.view.ViewConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,22 +12,26 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class Controller {
-    Logger logger = LoggerFactory.getLogger(Controller.class);
+    private final Logger logger = LoggerFactory.getLogger(Controller.class);
 
-    private final View view;
+    private final ConsoleView view;
     private static final Locale locale = Locale.UK;
     private boolean unsavedChoiceParsers = true;
     private List<Searcher> searchers;
 
-    public Controller(View view) {
+    public Controller(ConsoleView view) {
         this.view = view;
     }
 
     public void process() {
         try {
+            view.setLocale(view.getLocaleFromInput());
+            ResourceBundle rb = ResourceBundle.getBundle("lang", locale);
+
             while (true) {
                 if (unsavedChoiceParsers) {
                     searchers = view.getSearchers();
@@ -35,17 +39,20 @@ public class Controller {
                 }
 
                 List<Parser> parsers = ParserCache.getParsers(searchers);
-                view.println(ViewConstants.ENTER_QUERY);
+                view.println(rb.getString(ViewConstants.ENTER_QUERY)
+                        + " "
+                        + ViewConstants.EXIT_KEY
+                );
                 String query = view.getInput();
                 if (ViewConstants.EXIT_KEY.equals(query)) {
                     break;
                 }
 
-                view.println(ViewConstants.CONNECTING);
+                view.println(rb.getString(ViewConstants.CONNECTING));
 
                 List<SearchQueryDTO> models = getSearchQueryDTOList(query, parsers);
 
-                view.printSearchQueryDTO(models, locale);
+                view.printSearchQueryDTO(models, view.getLocale());
             }
         } catch (Exception e) {
             logger.error("Trouble", e);

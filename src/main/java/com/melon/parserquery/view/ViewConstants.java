@@ -3,14 +3,16 @@ package com.melon.parserquery.view;
 public class ViewConstants {
 
     public static final String EXIT_KEY = ":q";
-    public static final String INPUT_EMPTY = "Your input should not be empty";
-    public static final String ENTER_QUERY = "Enter your query. To exit enter: " + ViewConstants.EXIT_KEY;
-    public static final String CONNECTING = "Connecting";
-    public static final String CHOOSE_SEARCHERS = "Choose searchers:\n   0 - all searchers\n   1 - google\n   2 - yahoo\nEnter your choice:";
-    public static final String WRONG_OPTION = "Wrong option. Please enter correct option";
-    public static final String SAVE_PARSERS = "Save your choice? y/n";
-    public static final String Y = "y";
-    public static final String N = "n";
+    public static final String INPUT_EMPTY = "input_empty";
+    public static final String ENTER_QUERY = "enter_query";
+    public static final String CONNECTING = "connecting";
+    public static final String CHOOSE_SEARCHERS = "choose_searchers";
+    public static final String WRONG_OPTION = "wrong_option";
+    public static final String SAVE_PARSERS = "save_parsers";
+    public static final String YES = "yes";
+    public static final String NO = "no";
+    public static final String ENTER = "enter";
+    public static final String RESULTS = "results";
 
     private ViewConstants() {
     }
