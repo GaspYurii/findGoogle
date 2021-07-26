@@ -14,7 +14,7 @@ public class ConsoleView {
     private final Logger logger = LoggerFactory.getLogger(ConsoleView.class);
     private final Scanner scanner = new Scanner(System.in);
 
-    private Locale locale = Locale.UK;
+    private Locale locale = Locale.getDefault();
     private ResourceBundle rb = ResourceBundle.getBundle("lang", locale);
 
     private String getInputFromKeyboard() {
@@ -133,11 +133,11 @@ public class ConsoleView {
     public Locale getLocaleFromInput() {
         Locale locale1;
         do {
-            println("Choose language | Выберете язык");
+            println(rb.getString(ViewConstants.CHOOSE_LANGUAGE));
             for (LocaleMenuItem value : LocaleMenuItem.values()) {
                 println(value.toString());
             }
-            println("Enter number of your choice | Введите номер:");
+            println(rb.getString(ViewConstants.ENTER_CHOICE_NUMBER));
 
             locale1 = LocaleMenuItem.getLocaleByKey(getInput());
         } while (null == locale1);

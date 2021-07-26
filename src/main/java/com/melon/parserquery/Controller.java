@@ -16,10 +16,9 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class Controller {
+    private final Locale locale = Locale.UK;
     private final Logger logger = LoggerFactory.getLogger(Controller.class);
-
     private final ConsoleView view;
-    private static final Locale locale = Locale.UK;
     private boolean unsavedChoiceParsers = true;
     private List<Searcher> searchers;
 

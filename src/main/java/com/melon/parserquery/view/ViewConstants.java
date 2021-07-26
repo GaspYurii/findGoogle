@@ -13,6 +13,8 @@ public class ViewConstants {
     public static final String NO = "no";
     public static final String ENTER = "enter";
     public static final String RESULTS = "results";
+    public static final String CHOOSE_LANGUAGE = "choose_language";
+    public static final String ENTER_CHOICE_NUMBER = "enter_choice_number";
 
     private ViewConstants() {
     }
