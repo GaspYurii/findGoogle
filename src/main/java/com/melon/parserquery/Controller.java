@@ -12,46 +12,41 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class Controller {
-    private final Locale locale = Locale.UK;
     private final Logger logger = LoggerFactory.getLogger(Controller.class);
     private final ConsoleView view;
-    private boolean unsavedChoiceParsers = true;
+    private boolean savedChoiceParsers = false;
     private List<Searcher> searchers;
 
     public Controller(ConsoleView view) {
         this.view = view;
     }
 
+    /**
+     * Main logic method
+     */
     public void process() {
         try {
-            view.setLocale(view.getLocaleFromInput());
-            ResourceBundle rb = ResourceBundle.getBundle("lang", locale);
+            Locale locale = view.getLocaleFromInput();
+            view.setLocale(locale);
 
             while (true) {
-                if (unsavedChoiceParsers) {
+                if (!savedChoiceParsers) {
                     searchers = view.getSearchers();
-                    unsavedChoiceParsers = !view.isSavedChoiceParser(searchers);
+                    savedChoiceParsers = view.isSavedChoiceParser(searchers);
                 }
-
                 List<Parser> parsers = ParserCache.getParsers(searchers);
-                view.println(rb.getString(ViewConstants.ENTER_QUERY)
-                        + " "
-                        + ViewConstants.EXIT_KEY
-                );
-                String query = view.getInput();
+
+                String query = view.getQuery();
                 if (ViewConstants.EXIT_KEY.equals(query)) {
                     break;
                 }
 
-                view.println(rb.getString(ViewConstants.CONNECTING));
-
-                List<SearchQueryDTO> models = getSearchQueryDTOList(query, parsers);
-
-                view.printSearchQueryDTO(models, view.getLocale());
+                view.printConnection();
+                List<SearchQueryDTO> models = getSearchQueryDTOList(query, parsers, locale);
+                view.printSearchQueryDTO(models, locale);
             }
         } catch (Exception e) {
             logger.error("Trouble", e);
@@ -59,7 +54,7 @@ public class Controller {
 
     }
 
-    private List<SearchQueryDTO> getSearchQueryDTOList(String query, Collection<Parser> parsers) {
+    private List<SearchQueryDTO> getSearchQueryDTOList(String query, Collection<Parser> parsers, Locale locale) {
         return parsers.stream().parallel()
                 .map(parser -> parser.getSearchQueryDTO(query, locale))
                 .collect(Collectors.toList());

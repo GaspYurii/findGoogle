@@ -1,5 +1,6 @@
 package com.melon.parserquery.view;
 
+import com.melon.parserquery.LocaleService;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.parser.Searcher;
 import com.melon.parserquery.view.menu.LocaleMenuItem;
@@ -14,15 +15,14 @@ public class ConsoleView {
     private final Logger logger = LoggerFactory.getLogger(ConsoleView.class);
     private final Scanner scanner = new Scanner(System.in);
 
-    private Locale locale = Locale.getDefault();
-    private ResourceBundle rb = ResourceBundle.getBundle("lang", locale);
+    private Locale locale;
 
     private String getInputFromKeyboard() {
         return scanner.nextLine();
     }
 
     private String format(SearchQueryDTO model, Locale locale) {
-        return String.format(rb.getString(ViewConstants.RESULTS),
+        return String.format(LocaleService.getString(ViewConstants.RESULTS, locale),
                 NumberFormat.getInstance(locale).format(model.getResultCount()),
                 model.getSearcher());
     }
@@ -67,7 +67,7 @@ public class ConsoleView {
         String input = getInputFromKeyboard().trim();
 
         while (input.equals("")) {
-            println(rb.getString(ViewConstants.INPUT_EMPTY));
+            println(LocaleService.getString(ViewConstants.INPUT_EMPTY, locale));
             logger.debug("User input is empty or only spaces");
             input = getInputFromKeyboard().trim();
         }
@@ -75,22 +75,29 @@ public class ConsoleView {
     }
 
     /**
-     * Receives input from keyboard and get
+     * Receives input from keyboard and get searchers from menu item
      *
      * @return List of Searcher objects
      */
     public List<Searcher> getSearchers() {
         Searcher[] searchers = null;
-        logger.debug("{}", rb.getLocale());
+        logger.debug("{}", locale);
         do {
             if (searchers != null) {
-                println(rb.getString(ViewConstants.WRONG_OPTION));
+                println(LocaleService.getString(ViewConstants.WRONG_OPTION, locale));
                 logger.debug("Wrong option of searcher menu");
             }
-            println(rb.getString(ViewConstants.CHOOSE_SEARCHERS));
+            println(LocaleService.getString(ViewConstants.CHOOSE_SEARCHERS, locale));
             searchers = SearcherMenuItem.getSearcherByKey(getInput());
         } while (searchers.length == 0);
         return Arrays.asList(searchers);
+    }
+
+    public String getQuery() {
+        println(LocaleService.getString(ViewConstants.ENTER_QUERY, locale)
+                + " "
+                + ViewConstants.EXIT_KEY);
+        return getInput();
     }
 
     /**
@@ -101,15 +108,15 @@ public class ConsoleView {
      */
     public boolean isSavedChoiceParser(List<Searcher> searchers) {
         String input;
-        String yes = rb.getString(ViewConstants.YES);
+        String yes = LocaleService.getString(ViewConstants.YES, locale);
         String y = yes.substring(0, 1);
-        String no = rb.getString(ViewConstants.NO);
+        String no = LocaleService.getString(ViewConstants.NO, locale);
         String n = no.substring(0, 1);
         boolean result;
         do {
             println(String.format("%s %s %s(%s)/%s(%s)",
-                    rb.getString(ViewConstants.SAVE_PARSERS),
-                    rb.getString(ViewConstants.ENTER),
+                    LocaleService.getString(ViewConstants.SAVE_PARSERS, locale),
+                    LocaleService.getString(ViewConstants.ENTER, locale),
                     yes,
                     y,
                     no,
@@ -133,19 +140,15 @@ public class ConsoleView {
     public Locale getLocaleFromInput() {
         Locale locale1;
         do {
-            println(rb.getString(ViewConstants.CHOOSE_LANGUAGE));
+            println(LocaleService.getString(ViewConstants.CHOOSE_LANGUAGE));
             for (LocaleMenuItem value : LocaleMenuItem.values()) {
                 println(value.toString());
             }
-            println(rb.getString(ViewConstants.ENTER_CHOICE_NUMBER));
+            println(LocaleService.getString(ViewConstants.ENTER_CHOICE_NUMBER));
 
             locale1 = LocaleMenuItem.getLocaleByKey(getInput());
         } while (null == locale1);
         return locale1;
-    }
-
-    public Locale getLocale() {
-        return locale;
     }
 
     /**
@@ -155,6 +158,9 @@ public class ConsoleView {
      */
     public void setLocale(Locale locale) {
         this.locale = locale;
-        rb = ResourceBundle.getBundle("lang", locale);
+    }
+
+    public void printConnection() {
+        println(LocaleService.getString(ViewConstants.CONNECTING, locale));
     }
 }

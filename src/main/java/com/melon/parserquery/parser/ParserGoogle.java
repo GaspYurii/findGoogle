@@ -1,5 +1,6 @@
 package com.melon.parserquery.parser;
 
+import com.melon.parserquery.LocaleService;
 import com.melon.parserquery.exception.ParserException;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.webutils.WebPageConnector;
@@ -17,8 +18,8 @@ public class ParserGoogle implements Parser {
 
     private static final String GOOGLE_SEARCH_URL = "https://www.google.ru/search?q=";
     private static final String RESULT_STATS_ID = "result-stats";
-    private static final String REG_EX = "([0-9]{1,3},)+([0-9]{3})++";
-    private static final Pattern pattern = Pattern.compile(REG_EX);
+    private static final String REG_EX = "number_reg_ex.regexp";
+    private static final String DELIMITER = "delimiter";
 
     ParserGoogle() { /**/ }
 
@@ -36,7 +37,8 @@ public class ParserGoogle implements Parser {
         try {
             Document document = WebPageConnector.getDocument(GOOGLE_SEARCH_URL + query, locale);
             Element resultStats = document.getElementById(RESULT_STATS_ID);
-            long resultCount = getResultCount(resultStats.text(), pattern, ",");
+            Pattern pattern = Pattern.compile(LocaleService.getString(REG_EX, locale));
+            long resultCount = getResultCount(resultStats.text(), pattern, LocaleService.getString(DELIMITER, locale));
             logger.info("{}: About [{}] results in location [{}] for query: [{}]",
                     Searcher.GOOGLE, resultCount, locale, query);
             return resultCount;
