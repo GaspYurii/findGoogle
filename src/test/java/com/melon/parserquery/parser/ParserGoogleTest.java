@@ -1,5 +1,6 @@
 package com.melon.parserquery.parser;
 
+import com.melon.parserquery.LocaleService;
 import com.melon.parserquery.model.SearchQueryDTO;
 import org.junit.jupiter.api.Test;
 
@@ -9,12 +10,6 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ParserGoogleTest {
-
-    @Test
-    void getSearchQueryDTO() {
-        Parser parser = new ParserGoogle();
-        assertEquals(parser.getSearchQueryDTO("", Locale.UK).getClass(), SearchQueryDTO.class);
-    }
 
     @Test
     void getResultStats() {
@@ -30,20 +25,22 @@ class ParserGoogleTest {
     @Test
     void parseFromStringEN() {
         Parser parser = new ParserGoogle();
+        Locale locale = Locale.UK;
         assertEquals(1364973L, parser.getResultCount(
                 "1,364,973",
-                Pattern.compile("([0-9]{1,3},)+([0-9]{3})++"),
-                ",")
+                Pattern.compile(LocaleService.getString("number_reg_ex.regexp", locale)),
+                LocaleService.getString("delimiter", locale))
         );
     }
 
     @Test
     void parseFromStringRU() {
         Parser parser = new ParserGoogle();
+        Locale locale = new Locale("ru", "RU");
         assertEquals(1364973L, parser.getResultCount(
                 "1 364 973",
-                Pattern.compile("([0-9]{1,3} )+([0-9]{3})++"),
-                " ")
+                Pattern.compile(LocaleService.getString("number_reg_ex.regexp", locale)),
+                LocaleService.getString("delimiter", locale))
         );
     }
 }
