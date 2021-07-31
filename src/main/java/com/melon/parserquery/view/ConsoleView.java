@@ -1,6 +1,6 @@
 package com.melon.parserquery.view;
 
-import com.melon.parserquery.LocaleService;
+import com.melon.parserquery.locale.LocaleService;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.parser.Searcher;
 import com.melon.parserquery.view.menu.LocaleMenuItem;
@@ -22,7 +22,7 @@ public class ConsoleView {
     }
 
     private String format(SearchQueryDTO model, Locale locale) {
-        return String.format(LocaleService.getString(ViewConstants.RESULTS, locale),
+        return String.format(LocaleService.getValue(ViewConstants.RESULTS, locale),
                 NumberFormat.getInstance(locale).format(model.getResultCount()),
                 model.getSearcher());
     }
@@ -67,7 +67,7 @@ public class ConsoleView {
         String input = getInputFromKeyboard().trim();
 
         while (input.equals("")) {
-            println(LocaleService.getString(ViewConstants.INPUT_EMPTY, locale));
+            println(LocaleService.getValue(ViewConstants.INPUT_EMPTY, locale));
             logger.debug("User input is empty or only spaces");
             input = getInputFromKeyboard().trim();
         }
@@ -84,17 +84,17 @@ public class ConsoleView {
         logger.debug("{}", locale);
         do {
             if (searchers != null) {
-                println(LocaleService.getString(ViewConstants.WRONG_OPTION, locale));
+                println(LocaleService.getValue(ViewConstants.WRONG_OPTION, locale));
                 logger.debug("Wrong option of searcher menu");
             }
-            println(LocaleService.getString(ViewConstants.CHOOSE_SEARCHERS, locale));
+            println(LocaleService.getValue(ViewConstants.CHOOSE_SEARCHERS, locale));
             searchers = SearcherMenuItem.getSearcherByKey(getInput());
         } while (searchers.length == 0);
         return Arrays.asList(searchers);
     }
 
     public String getQuery() {
-        println(LocaleService.getString(ViewConstants.ENTER_QUERY, locale)
+        println(LocaleService.getValue(ViewConstants.ENTER_QUERY, locale)
                 + " "
                 + ViewConstants.EXIT_KEY);
         return getInput();
@@ -108,15 +108,15 @@ public class ConsoleView {
      */
     public boolean isSavedChoiceParser(List<Searcher> searchers) {
         String input;
-        String yes = LocaleService.getString(ViewConstants.YES, locale);
+        String yes = LocaleService.getValue(ViewConstants.YES, locale);
         String y = yes.substring(0, 1);
-        String no = LocaleService.getString(ViewConstants.NO, locale);
+        String no = LocaleService.getValue(ViewConstants.NO, locale);
         String n = no.substring(0, 1);
         boolean result;
         do {
             println(String.format("%s %s %s(%s)/%s(%s)",
-                    LocaleService.getString(ViewConstants.SAVE_PARSERS, locale),
-                    LocaleService.getString(ViewConstants.ENTER, locale),
+                    LocaleService.getValue(ViewConstants.SAVE_PARSERS, locale),
+                    LocaleService.getValue(ViewConstants.ENTER, locale),
                     yes,
                     y,
                     no,
@@ -140,11 +140,11 @@ public class ConsoleView {
     public Locale getLocaleFromInput() {
         Locale locale1;
         do {
-            println(LocaleService.getString(ViewConstants.CHOOSE_LANGUAGE));
+            println(LocaleService.getValue(ViewConstants.CHOOSE_LANGUAGE));
             for (LocaleMenuItem value : LocaleMenuItem.values()) {
                 println(value.toString());
             }
-            println(LocaleService.getString(ViewConstants.ENTER_CHOICE_NUMBER));
+            println(LocaleService.getValue(ViewConstants.ENTER_CHOICE_NUMBER));
 
             locale1 = LocaleMenuItem.getLocaleByKey(getInput());
         } while (null == locale1);
@@ -161,6 +161,6 @@ public class ConsoleView {
     }
 
     public void printConnection() {
-        println(LocaleService.getString(ViewConstants.CONNECTING, locale));
+        println(LocaleService.getValue(ViewConstants.CONNECTING, locale));
     }
 }

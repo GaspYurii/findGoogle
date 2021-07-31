@@ -8,7 +8,7 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ParserGoogleTest {
+class ParserYahooTest {
 
     @Test
     void shouldReturnDelimiterFromUkLocale() {
@@ -29,5 +29,4 @@ class ParserGoogleTest {
 
         assertEquals(expected, actual);
     }
-
 }

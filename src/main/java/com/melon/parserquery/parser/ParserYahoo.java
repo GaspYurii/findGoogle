@@ -1,7 +1,8 @@
 package com.melon.parserquery.parser;
 
-import com.melon.parserquery.LocaleService;
 import com.melon.parserquery.exception.ParserException;
+import com.melon.parserquery.locale.LocaleConstants;
+import com.melon.parserquery.locale.LocaleService;
 import com.melon.parserquery.model.SearchQueryDTO;
 import com.melon.parserquery.webutils.WebPageConnector;
 import org.jsoup.nodes.Document;
@@ -19,8 +20,6 @@ public class ParserYahoo implements Parser {
     private static final String YAHOO_SEARCH_URL = "https://search.yahoo.com/search?p=";
     private static final String STATISTIC_SELECTOR_USUAL = "div.compPagination > span";
     private static final String STATISTIC_SELECTOR_UNUSUAL = "div.compTitle.fc-smoke";
-    private static final String REG_EX = "number_reg_ex.regexp";
-    private static final String DELIMITER = "delimiter";
 
     ParserYahoo() { /**/ }
 
@@ -43,9 +42,12 @@ public class ParserYahoo implements Parser {
                 resultStats = document.selectFirst(STATISTIC_SELECTOR_UNUSUAL);
             }
 
-            Pattern pattern = Pattern.compile(LocaleService.getString(REG_EX, locale));
+            Pattern pattern = Pattern.compile(LocaleService.getValue(LocaleConstants.REG_EX, locale));
 
-            long resultCount = getResultCount(resultStats.text(), pattern, LocaleService.getString(DELIMITER, locale));
+            long resultCount = getResultCount(
+                    resultStats.text(),
+                    pattern,
+                    LocaleService.getValue(LocaleConstants.DELIMITER, locale));
             logger.info("{}: About [{}] results in location [{}] for query: [{}]",
                     Searcher.YAHOO, resultCount, locale, query);
             return resultCount;

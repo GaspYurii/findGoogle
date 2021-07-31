@@ -15,8 +15,7 @@ public class WebPageConnector {
     }
 
     public static Document getDocument(String url, Locale locale) throws IOException {
-        String logInfo = "Connecting to: " + url;
-        logger.info(logInfo);
+        logger.info("Connecting to: {}", url);
         return Jsoup.connect(url)
                 .header("Accept-Language", locale.toLanguageTag())
                 .get();
