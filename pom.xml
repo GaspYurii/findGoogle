@@ -21,7 +21,15 @@
         <junit.version>5.7.2</junit.version>
     </properties>
 
+
     <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Parsing-->
         <dependency>
             <groupId>org.jsoup</groupId>

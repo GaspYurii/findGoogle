@@ -1,5 +1,7 @@
 package com.melon.parserquery.parser;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +15,11 @@ public class ParserCache {
     private ParserCache() {
     }
 
-    public static Parser getParser(Searcher searcher) {
+    public static Parser getParser(@NotNull Searcher searcher) {
         return cache.computeIfAbsent(searcher, k -> factory.create(searcher));
     }
 
-    public static List<Parser> getParsers(Collection<Searcher> searchers) {
+    public static List<Parser> getParsers(@NotNull Collection<Searcher> searchers) {
         return searchers.stream().parallel()
                 .map(ParserCache::getParser)
                 .collect(Collectors.toList());
