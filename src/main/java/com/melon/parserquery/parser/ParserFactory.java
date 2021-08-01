@@ -1,13 +1,12 @@
 package com.melon.parserquery.parser;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ParserFactory {
     private final Logger logger = LoggerFactory.getLogger(ParserFactory.class);
 
-    public Parser create(@NotNull Searcher searcher) {
+    public Parser create(Searcher searcher) {
         if (Searcher.GOOGLE.equals(searcher)) {
             logInfo(searcher);
             return new ParserGoogle();

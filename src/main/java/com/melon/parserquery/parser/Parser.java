@@ -2,7 +2,6 @@ package com.melon.parserquery.parser;
 
 
 import com.melon.parserquery.model.SearchQueryDTO;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -14,11 +13,15 @@ public interface Parser {
 
     long getResultStats(String query, Locale locale);
 
-    default long getResultCount(String stringToParse, @NotNull Pattern pattern, String delimiter) {
-        if ("".equals(stringToParse)) {
+    default long getResultCount(String stringToParse, Pattern pattern, String delimiter) {
+        if (stringToParse == null || stringToParse.isEmpty()) {
             throw new IllegalArgumentException("String to parse shouldn't be empty");
         }
-        if ("".equals(delimiter)) {
+        if (pattern == null) {
+            throw new IllegalArgumentException("Pattern shouldn't be null");
+        }
+
+        if (delimiter == null || delimiter.isEmpty()) {
             throw new IllegalArgumentException("Delimiter shouldn't be empty");
         }
 
