@@ -43,6 +43,12 @@ public class ConsoleView {
      * @param locale localization for formatting constructed string
      */
     public void printSearchQueryDTO(SearchQueryDTO model, Locale locale) {
+        if (model == null || locale == null) {
+            throw new IllegalArgumentException(
+                    String.format("Parameter shouldn't be null. Model - %s, locale - %s",
+                            model, locale));
+
+        }
         println(format(model, locale));
     }
 
@@ -53,6 +59,11 @@ public class ConsoleView {
      * @param locale localization for formatting constructed string
      */
     public void printSearchQueryDTO(Collection<SearchQueryDTO> models, Locale locale) {
+        if (models == null || models.isEmpty() || locale == null) {
+            throw new IllegalArgumentException(
+                    String.format("Parameters shouldn't be null or empty. Models - %s, locale - %s",
+                            models, locale));
+        }
         for (SearchQueryDTO model : models) {
             printSearchQueryDTO(model, locale);
         }
@@ -107,6 +118,10 @@ public class ConsoleView {
      * @return "true" if searchers are saved
      */
     public boolean isSavedChoiceParser(List<Searcher> searchers) {
+        if (searchers == null || searchers.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         String input;
         String yes = LocaleService.getValue(ViewConstants.YES, locale);
         String y = yes.substring(0, 1);
@@ -157,6 +172,9 @@ public class ConsoleView {
      * @param locale set locale in object of View class
      */
     public void setLocale(Locale locale) {
+        if (locale == null) {
+            throw new IllegalArgumentException("Parameter shouldn't be null");
+        }
         this.locale = locale;
     }
 
