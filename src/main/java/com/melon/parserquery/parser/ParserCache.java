@@ -14,12 +14,18 @@ public class ParserCache {
     }
 
     public static Parser getParser(Searcher searcher) {
-        return cache.computeIfAbsent(searcher, k -> factory.create(searcher));
+        if (searcher != null) {
+            return cache.computeIfAbsent(searcher, k -> factory.create(searcher));
+        }
+        throw new IllegalArgumentException("Parameter shouldn't be null");
     }
 
     public static List<Parser> getParsers(Collection<Searcher> searchers) {
-        return searchers.stream().parallel()
-                .map(ParserCache::getParser)
-                .collect(Collectors.toList());
+        if (searchers != null && !searchers.isEmpty()) {
+            return searchers.stream()
+                    .map(ParserCache::getParser)
+                    .collect(Collectors.toList());
+        }
+        throw new IllegalArgumentException("Parameter shouldn't be null or empty");
     }
 }

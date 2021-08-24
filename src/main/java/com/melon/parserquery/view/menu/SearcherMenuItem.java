@@ -15,6 +15,12 @@ public enum SearcherMenuItem {
         this.searchers = searchers;
     }
 
+    /**
+     * Get array of Searcher enum objects
+     *
+     * @param key string key of SearcherMenuItem
+     * @return Searcher[] or null
+     */
     public static Searcher[] getSearcherByKey(String key) {
         for (SearcherMenuItem item : SearcherMenuItem.values()) {
             if (item.getKey().equals(key)) {

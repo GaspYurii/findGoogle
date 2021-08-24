@@ -1,6 +1,5 @@
 package com.melon.parserquery.parser;
 
-
 import com.melon.parserquery.model.SearchQueryDTO;
 
 import java.util.Locale;
@@ -13,9 +12,18 @@ public interface Parser {
 
     long getResultStats(String query, Locale locale);
 
-    default long getResultCount(String string, Pattern pattern, String delimiter) {
+    default long getResultCount(String stringToParse, Pattern pattern, String delimiter) {
+        if (stringToParse == null || stringToParse.isEmpty() ||
+                delimiter == null || delimiter.isEmpty() ||
+                pattern == null
+        ) {
+            throw new IllegalArgumentException(
+                    String.format("Parameter shouldn't be empty or null. Method invoked with params: stringToParse - %s, pattern - %s, delimiter - %s",
+                            stringToParse, pattern, delimiter));
+        }
+
         String resultString = "";
-        Matcher matcher = pattern.matcher(string);
+        Matcher matcher = pattern.matcher(stringToParse);
 
         while (matcher.find()) {
             resultString = matcher.group();
