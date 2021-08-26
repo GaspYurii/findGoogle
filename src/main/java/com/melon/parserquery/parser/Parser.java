@@ -10,9 +10,11 @@ public interface Parser {
 
     SearchQueryDTO getSearchQueryDTO(String query, Locale locale);
 
-    long getResultStats(String query, Locale locale);
+    long getResultCount(String query, Locale locale);
 
-    default long getResultCount(String stringToParse, Pattern pattern, String delimiter) {
+    String getResultStats(String query, Locale locale);
+
+    default long parseLongResultCount(String stringToParse, Pattern pattern, String delimiter) {
         if (stringToParse == null || stringToParse.isEmpty() ||
                 delimiter == null || delimiter.isEmpty() ||
                 pattern == null

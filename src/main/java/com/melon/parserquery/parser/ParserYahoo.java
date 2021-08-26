@@ -21,39 +21,50 @@ public class ParserYahoo implements Parser {
     private static final String STATISTIC_SELECTOR_USUAL = "div.compPagination > span";
     private static final String STATISTIC_SELECTOR_UNUSUAL = "div.compTitle.fc-smoke";
 
-    ParserYahoo() { /**/ }
+    private final WebPageConnector webPageConnector;
+
+    ParserYahoo(WebPageConnector webPageConnector) {
+        this.webPageConnector = webPageConnector;
+    }
 
     @Override
     public SearchQueryDTO getSearchQueryDTO(String query, Locale locale) {
         return SearchQueryDTO.builder()
                 .setQuery(query)
-                .setResultCount(getResultStats(query, locale))
+                .setResultCount(getResultCount(query, locale))
                 .setSearcher(Searcher.YAHOO)
                 .build();
     }
 
     @Override
-    public long getResultStats(String query, Locale locale) {
+    public String getResultStats(String query, Locale locale) {
         try {
-            Document document = WebPageConnector.getDocument(YAHOO_SEARCH_URL + query, locale);
+            Document document = webPageConnector.getDocument(YAHOO_SEARCH_URL + query, locale);
             Element resultStats = document.selectFirst(STATISTIC_SELECTOR_USUAL);
 
             if (resultStats == null) {
                 resultStats = document.selectFirst(STATISTIC_SELECTOR_UNUSUAL);
             }
-
-            Pattern pattern = Pattern.compile(LocaleService.getValue(LocaleConstants.REG_EX, locale));
-
-            long resultCount = getResultCount(
-                    resultStats.text(),
-                    pattern,
-                    LocaleService.getValue(LocaleConstants.DELIMITER, locale));
             logger.info("{}: About [{}] results in location [{}] for query: [{}]",
-                    Searcher.YAHOO, resultCount, locale, query);
-            return resultCount;
+                    Searcher.GOOGLE, resultStats.text(), locale, query);
+            return resultStats.text();
         } catch (IOException e) {
             throw new ParserException();
         }
+    }
+
+    @Override
+    public long getResultCount(String query, Locale locale) {
+        Pattern pattern = Pattern.compile(LocaleService.getValue(LocaleConstants.REG_EX, locale));
+
+        long resultCount = parseLongResultCount(
+                getResultStats(query, locale),
+                pattern,
+                LocaleService.getValue(LocaleConstants.DELIMITER, locale));
+        logger.info("{}: About [{}] results in location [{}] for query: [{}]",
+                Searcher.YAHOO, resultCount, locale, query);
+
+        return resultCount;
     }
 
 }

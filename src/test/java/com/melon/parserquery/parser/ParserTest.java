@@ -25,7 +25,7 @@ class ParserTest {
         Pattern pattern = Pattern.compile(LocaleService.getValue(LocaleConstants.REG_EX, locale));
         String delimiter = LocaleService.getValue(LocaleConstants.DELIMITER, locale);
 
-        long actual = parser.getResultCount(valueToParse, pattern, delimiter);
+        long actual = parser.parseLongResultCount(valueToParse, pattern, delimiter);
 
         assertEquals(expected, actual);
     }
@@ -40,7 +40,7 @@ class ParserTest {
         Pattern pattern = Pattern.compile(LocaleService.getValue(LocaleConstants.REG_EX, locale));
         String delimiter = LocaleService.getValue(LocaleConstants.DELIMITER, locale);
 
-        long actual = parser.getResultCount(valueToParse, pattern, delimiter);
+        long actual = parser.parseLongResultCount(valueToParse, pattern, delimiter);
 
         assertEquals(expected, actual);
     }
@@ -53,7 +53,7 @@ class ParserTest {
         Pattern pattern = Pattern.compile(LocaleService.getValue(LocaleConstants.REG_EX, locale));
         String delimiter = LocaleService.getValue(LocaleConstants.DELIMITER, locale);
 
-        long actual = parser.getResultCount(valueToParse, pattern, delimiter);
+        long actual = parser.parseLongResultCount(valueToParse, pattern, delimiter);
 
         assertEquals(expected, actual);
     }
@@ -67,7 +67,7 @@ class ParserTest {
         Pattern pattern = Pattern.compile(LocaleService.getValue(LocaleConstants.REG_EX, locale));
         String delimiter = LocaleService.getValue(LocaleConstants.DELIMITER, locale);
 
-        long actual = parser.getResultCount(valueToParse, pattern, delimiter);
+        long actual = parser.parseLongResultCount(valueToParse, pattern, delimiter);
 
         assertEquals(expected, actual);
     }
@@ -83,7 +83,7 @@ class ParserTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> parser.getResultCount(valueToParse, pattern, delimiter)
+                () -> parser.parseLongResultCount(valueToParse, pattern, delimiter)
         );
     }
 
@@ -151,8 +151,13 @@ class ParserTest {
         }
 
         @Override
-        public long getResultStats(String query, Locale locale) {
+        public long getResultCount(String query, Locale locale) {
             return 0;
+        }
+
+        @Override
+        public String getResultStats(String query, Locale locale) {
+            return "0";
         }
 
     }

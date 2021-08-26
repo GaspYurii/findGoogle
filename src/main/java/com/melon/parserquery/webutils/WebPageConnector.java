@@ -11,10 +11,10 @@ import java.util.Locale;
 public class WebPageConnector {
     private static final Logger logger = LoggerFactory.getLogger(WebPageConnector.class);
 
-    private WebPageConnector() {
+    public WebPageConnector() { /**/
     }
 
-    public static Document getDocument(String url, Locale locale) throws IOException {
+    public Document getDocument(String url, Locale locale) throws IOException {
         logger.info("Connecting to: {}", url);
         return Jsoup.connect(url)
                 .header("Accept-Language", locale.toLanguageTag())

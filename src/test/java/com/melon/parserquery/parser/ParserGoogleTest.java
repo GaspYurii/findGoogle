@@ -1,33 +1,22 @@
 package com.melon.parserquery.parser;
 
-import com.melon.parserquery.locale.LocaleConstants;
-import com.melon.parserquery.locale.LocaleService;
+import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
-import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class ParserGoogleTest {
+    @Mock
+    Document document = mock(Document.class);
+
+    @Mock
+    ParserGoogle parserGoogle = mock(ParserGoogle.class);
 
     @Test
-    void shouldReturnDelimiterFromUkLocale() {
-        String expected = ",";
-        String property = LocaleConstants.DELIMITER;
+    void getParserTest() {
 
-        String actual = LocaleService.getValue(property, Locale.UK);
-
-        assertEquals(expected, actual);
+        document.getElementById("result-stats");
+        verify(document, times(1)).getElementById("result-stats");
     }
-
-    @Test
-    void shouldReturnDelimiterFromRuLocale() {
-        String expected = " ";
-        String property = LocaleConstants.DELIMITER;
-
-        String actual = LocaleService.getValue(property, new Locale("ru", "RU"));
-
-        assertEquals(expected, actual);
-    }
-
 }
